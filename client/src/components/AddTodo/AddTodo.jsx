@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
+import { useDispatch } from "react-redux";
+import { addTodos } from "../../redux/actions";
 
 
 export default function AddTodo({addHandler}) {
@@ -9,17 +11,20 @@ function inputHandler(e) {
   setInput(e.target.value)
 }
 
-function submitHandler(e) {
-  e.preventDefault()
-  if (input.trim()) {
-    addHandler(input.trim());
-    setInput('');
-  }
-  
+const dispatch = useDispatch();
+
+const createTodo = (e) => {
+  e.preventDefault();
+  dispatch(addTodos({
+    text: input,
+    id: Date.now(),
+    completed: false,
+  }));
+  setInput('')
 }
 
   return (
-    <form onSubmit={submitHandler} style={{maxWidth: '36rem', margin: "5px auto"}} className="center">
+    <form onSubmit={createTodo} style={{maxWidth: '36rem', margin: "5px auto"}} className="center">
       <div className="mb-3">
         <label htmlFor="exampleInputEmail1" className="form-label">Add new todo</label>
         <input name="newTodo" type="text" onChange={inputHandler} value={input} className="form-control" id="exampleInputTodo" />
